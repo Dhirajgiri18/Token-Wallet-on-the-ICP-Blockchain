@@ -6,14 +6,16 @@ use std::collections::HashMap;
 type AccountId = String;
 type Balance = u64;
 
+/// Represents a simple token wallet structure
 #[derive(CandidType, Deserialize, Default)]
 struct Wallet {
     balances: HashMap<AccountId, Balance>,
 }
 
 thread_local! {
+    /// Stores the wallet instance and ensures every user starts with 100 tokens
     static WALLET: RefCell<Wallet> = RefCell::new(Wallet {
-        balances: HashMap::new(),
+        balances: HashMap::from([(ic_cdk::caller().to_string(), 100)]),
     });
 }
 
